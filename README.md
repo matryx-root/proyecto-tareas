@@ -1,5 +1,12 @@
 # Proyecto Gestión de Tareas
 
+# Ver Proyecto
+https://proyecto-tareas-simon-velasquez.netlify.app
+
+# Ver Firebase
+https://proyecto-tareas2-17c5e.web.app
+
+
 ## Descripción
 
 Este proyecto es una aplicación de gestión de tareas desarrollada con **React**, que permite a los usuarios:
