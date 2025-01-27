@@ -3,12 +3,11 @@ import { BrowserRouter as Router, Route, Routes, useNavigate } from "react-route
 import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db, auth } from "./firebaseConfig";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-
 import "bootstrap/dist/css/bootstrap.min.css";
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
 import AuthForm from "./components/AuthForm";
-import axios from "axios";
+import "./testUpload"; // Importa el archivo de prueba
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -19,17 +18,22 @@ function App() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setIsAuthenticated(!!user); // Cambia el estado según la autenticación
+      setIsAuthenticated(!!user);
+      if (user) {
+        navigate("/tasks");
+      } else {
+        navigate("/");
+      }
     });
     return () => unsubscribe();
-  }, []);
+  }, [navigate]);
 
   // Función para cerrar sesión
   const handleLogout = async () => {
     try {
       await signOut(auth);
       console.log("Sesión cerrada");
-      navigate("/"); // Redirige al inicio de sesión
+      navigate("/");
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
     }
@@ -38,7 +42,6 @@ function App() {
   useEffect(() => {
     if (isAuthenticated) {
       fetchTasks();
-      fetchExternalData(); // Llama a una API externa usando Axios
     }
   }, [isAuthenticated]);
 
@@ -52,15 +55,6 @@ function App() {
       setTasks(fetchedTasks);
     } catch (error) {
       console.error("Error al obtener tareas:", error);
-    }
-  };
-
-  const fetchExternalData = async () => {
-    try {
-      const response = await axios.get("https://jsonplaceholder.typicode.com/todos");
-      console.log("Datos externos:", response.data.slice(0, 5)); // Muestra los primeros 5 resultados
-    } catch (error) {
-      console.error("Error al obtener datos externos:", error);
     }
   };
 
@@ -107,16 +101,22 @@ function App() {
         <Route
           path="/tasks"
           element={
-            <>
-              <div className="d-flex justify-content-between align-items-center mb-4">
-                <h1 className="text-center">Gestión de Tareas</h1>
-                <button className="btn btn-danger" onClick={handleLogout}>
-                  Cerrar Sesión
-                </button>
+            isAuthenticated ? (
+              <>
+                <div className="d-flex justify-content-between align-items-center mb-4">
+                  <h1 className="text-center">Gestión de Tareas</h1>
+                  <button className="btn btn-danger" onClick={handleLogout}>
+                    Cerrar Sesión
+                  </button>
+                </div>
+                <TaskForm onAddTask={addTask} editingTask={editingTask} />
+                <TaskList tasks={tasks} onDeleteTask={deleteTask} onEditTask={startEditTask} />
+              </>
+            ) : (
+              <div className="text-center mt-5">
+                <h3>No tienes acceso. Por favor, inicia sesión.</h3>
               </div>
-              <TaskForm onAddTask={addTask} editingTask={editingTask} />
-              <TaskList tasks={tasks} onDeleteTask={deleteTask} onEditTask={startEditTask} />
-            </>
+            )
           }
         />
       </Routes>
