@@ -4,12 +4,22 @@ import SimpleReactValidator from "simple-react-validator";
 function TaskForm({ onAddTask, editingTask }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [validator] = useState(new SimpleReactValidator());
+  const [validator] = useState(new SimpleReactValidator({
+    messages: {
+      required: "Este campo es obligatorio.",
+      min: "Debe tener al menos :min caracteres.",
+      max: "No puede exceder :max caracteres.",
+      alpha_space: "El título solo puede contener letras y espacios.",
+    },
+  }));
 
   useEffect(() => {
     if (editingTask) {
       setTitle(editingTask.title);
       setDescription(editingTask.description);
+    } else {
+      setTitle("");
+      setDescription("");
     }
   }, [editingTask]);
 
@@ -35,7 +45,7 @@ function TaskForm({ onAddTask, editingTask }) {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        {validator.message("title", title, "required|min:3|max:50", {
+        {validator.message("title", title, "required|alpha_space|min:3|max:50", {
           className: "text-danger",
         })}
       </div>
@@ -46,12 +56,9 @@ function TaskForm({ onAddTask, editingTask }) {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
-        {validator.message(
-          "description",
-          description,
-          "required|min:5|max:200",
-          { className: "text-danger" }
-        )}
+        {validator.message("description", description, "required|min:5|max:200", {
+          className: "text-danger",
+        })}
       </div>
       <button type="submit" className="btn btn-primary">
         {editingTask ? "Actualizar Tarea" : "Agregar Tarea"}

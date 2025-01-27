@@ -1,34 +1,53 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Importa useNavigate para redirecciones
+import { useNavigate } from "react-router-dom";
 import { auth } from "../firebaseConfig";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 function AuthForm() {
   const [email, setEmail] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-
   const [password, setPassword] = useState("");
   const [isRegister, setIsRegister] = useState(true);
-  const navigate = useNavigate(); // Inicializa navigate para redirecciones
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const navigate = useNavigate();
+
+  const validatePassword = (password) => {
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return passwordRegex.test(password);
+  };
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateEmail(email)) {
+      setErrorMessage("El correo electrónico no tiene un formato válido.");
+      return;
+    }
+    if (!validatePassword(password)) {
+      setErrorMessage(
+        "La contraseña debe tener al menos 8 caracteres, una letra mayúscula, un número y un carácter especial."
+      );
+      return;
+    }
     try {
       if (isRegister) {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        console.log("Usuario registrado:", userCredential);
+        await createUserWithEmailAndPassword(auth, email, password);
+        console.log("Usuario registrado");
       } else {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        console.log("Usuario autenticado:", userCredential);
+        await signInWithEmailAndPassword(auth, email, password);
+        console.log("Usuario autenticado");
       }
+      setErrorMessage("");
       navigate("/tasks");
     } catch (error) {
       console.error("Error en la autenticación:", error.message);
       setErrorMessage(error.message);
     }
   };
-  
-  
 
   return (
     <div className="container mt-4">
@@ -54,15 +73,13 @@ function AuthForm() {
             required
           />
         </div>
+        {errorMessage && <p className="text-danger">{errorMessage}</p>}
         <button type="submit" className="btn btn-primary btn-block">
           {isRegister ? "Registrarse" : "Iniciar Sesión"}
         </button>
       </form>
       <div className="text-center mt-3">
-        <button
-          className="btn btn-link"
-          onClick={() => setIsRegister(!isRegister)}
-        >
+        <button className="btn btn-link" onClick={() => setIsRegister(!isRegister)}>
           {isRegister ? "¿Ya tienes cuenta? Inicia sesión" : "¿No tienes cuenta? Regístrate"}
         </button>
       </div>
