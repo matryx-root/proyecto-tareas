@@ -6,6 +6,7 @@ https://proyecto-tareas-simon-velasquez.netlify.app
 # Ver Firebase
 https://proyecto-tareas2-17c5e.web.app
 
+https://proyecto-tareas2-17c5e.firebaseapp.com/
 
 ## Descripción
 

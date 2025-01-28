@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'; // Asegúrate de importar defineConfig
+import { defineConfig } from 'vite'; 
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
@@ -7,10 +7,10 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
     rollupOptions: {
-      input: 'index.html', // Cambia esto si usas otro archivo de entrada
-      external: ["bootstrap"], // Excluye Bootstrap si se usa desde un CDN
+      input: 'index.html', 
+      external: ["bootstrap"], 
     },
   },
   publicDir: 'public',
-  base: './', // Asegura rutas relativas en producción
+  base: './', 
 });

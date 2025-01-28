@@ -15,14 +15,14 @@ function TaskList({ tasks, onDeleteTask, onEditTask }) {
             <p className="mb-1 text-muted">{task.description}</p>
           </div>
           <div>
-            {/* Comunicación hacia el padre para iniciar la edición */}
+            {}
             <button
               className="btn btn-warning btn-sm me-2"
               onClick={() => onEditTask(task)}
             >
               Editar
             </button>
-            {/* Comunicación hacia el padre para eliminar una tarea */}
+            {}
             <button
               className="btn btn-danger btn-sm"
               onClick={() => onDeleteTask(task.id)}

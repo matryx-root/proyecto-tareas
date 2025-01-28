@@ -36,7 +36,7 @@ function TaskForm({ onAddTask, editingTask }) {
       return;
     }
 
-    // Verificar si el archivo tiene un tipo permitido
+    
     const allowedTypes = ["application/pdf", "image/jpeg", "image/png"];
     if (!allowedTypes.includes(file.type)) {
       alert("Tipo de archivo no permitido. Solo se aceptan PDF, JPG y PNG.");
@@ -44,7 +44,7 @@ function TaskForm({ onAddTask, editingTask }) {
     }
 
     if (validator.allValid()) {
-      setIsUploading(true); // Indica que la subida está en curso
+      setIsUploading(true); 
       const storage = getStorage();
       const storageRef = ref(storage, `uploads/${file.name}`);
       const uploadTask = uploadBytesResumable(storageRef, file);
@@ -66,9 +66,9 @@ function TaskForm({ onAddTask, editingTask }) {
             onAddTask({
               title,
               description,
-              fileURL: downloadURL, // URL del archivo subido
+              fileURL: downloadURL, 
             });
-            // Resetear los campos
+            
             setTitle("");
             setDescription("");
             setFile(null);
@@ -136,7 +136,7 @@ function TaskForm({ onAddTask, editingTask }) {
       <button
         type="submit"
         className="btn btn-primary"
-        disabled={isUploading} // Deshabilitar el botón durante la subida
+        disabled={isUploading} 
       >
         {editingTask ? "Actualizar Tarea" : "Agregar Tarea"}
       </button>

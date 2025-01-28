@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom"; // Solo aquí debe estar el BrowserRouter
+import { BrowserRouter } from "react-router-dom"; 
 import App from "./App";
 import "./index.css";
-import "./testUpload"; // Importa el archivo de prueba
+import "./testUpload"; 
 
 console.log("Montando React...");
 

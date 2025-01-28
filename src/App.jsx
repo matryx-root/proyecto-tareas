@@ -7,7 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
 import AuthForm from "./components/AuthForm";
-import "./testUpload"; // Importa el archivo de prueba
+import "./testUpload"; 
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -28,7 +28,7 @@ function App() {
     return () => unsubscribe();
   }, [navigate]);
 
-  // Función para cerrar sesión
+ 
   const handleLogout = async () => {
     try {
       await signOut(auth);
